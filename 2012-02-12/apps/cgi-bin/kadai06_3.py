@@ -5,7 +5,7 @@
 CREATE DATABASE dh2012 DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 CREATE table session(
   id int not null auto_increment primary key,
-  session_id varchar(20) unique,
+  session_id varchar(255) unique,
   data text
 );
 
@@ -24,7 +24,6 @@ DBHOST = "localhost"
 DBNAME = "dh2012"
 DBUSER = "root"
 DBPASSWD = ""
-
 TABLE_NAME = 'session'
 
 TEMPLATE_DIR = "../../templates/"
@@ -92,7 +91,14 @@ def get_fruits(con, table_name, session_id):
     - `table_name`:
     - `session_id`:
     """
-    pass
+    sql = "SELECT data FROM " + table_name + " WHERE session_id=%s"
+    cur = con.cursor()
+    cur.execute(sql, (session_id, ))
+    res = cur.fetchone()
+    if res is None:
+        return []
+    else:
+        return json.loads(res[0])
 
 def save_fruits(con, table_name, session_id, fruits_list):
     """
@@ -103,7 +109,17 @@ def save_fruits(con, table_name, session_id, fruits_list):
     - `session_id`:
     - `fruits_list`:
     """
-    pass
+    fruits_str = json.dumps(fruits_list)
+    sql = "SELECT data FROM " + table_name + " WHERE session_id=%s"
+    cur = con.cursor()
+    cur.execute(sql, (session_id, ))
+    res = cur.fetchone()
+    if res is None:
+        save_sql = "INSERT INTO " + table_name + "  (data,session_id) VALUES(%s,%s)"
+    else:
+        save_sql = "UPDATE " + table_name + " SET data=%s WHERE session_id=%s"
+    cur.execute(save_sql, (fruits_str,session_id))
+    con.commit()
 
 def clear_fruits(con, table_name, session_id):
     """
@@ -113,9 +129,11 @@ def clear_fruits(con, table_name, session_id):
     - `table_name`:
     - `session_id`:
     """
-    pass
+    sql = "DELETE FROM " + table_name + " WHERE session_id=%s"
+    cur = con.cursor()
+    cur.execute(sql, (session_id, ))
+    con.commit()
     
-
 #htmlを表示するためのベース
 def base_to_html(cookie=None):
      print "Content-type:text/html; charset=utf-8"
