@@ -60,6 +60,7 @@ def main():
         
     elif which == "clear": # かごの中を空にする
         clear_fruits(con, TABLE_NAME, session_id)
+        fruits_in_basket = []
         message_list.append(CLEAR_MESSAGE)
 
     if fruits_in_basket == []:
@@ -153,9 +154,25 @@ def show_html(fruits_in_basket, choose_list, message_list, cookie):
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), TEMPLATE_DIR, 'index.html'))
     f = open(path,'r').read()
     base_to_html(cookie)
-    fruits_in_basket_str = ""
-    added_str = ""
-    message_str = ""
+
+    added_str = "と".join([ FRUITS[fruit] for fruit in choose_list ])
+    if added_str:
+        added_str += "を追加しました。"
+
+    message_str = "<br />".join(message_list)
+
+    fruits_dict = {}
+    for fruit in fruits_in_basket:
+        if fruit in fruits_dict:
+            fruits_dict[fruit] += 1
+        else:
+            fruits_dict[fruit] = 1
+    fruits_in_basket_list = []
+    for name,count in fruits_dict.items():
+        fruits_in_basket_list.append("%s x %d" % (FRUITS[name], count))
+
+    fruits_in_basket_str = '<br />'.join(fruits_in_basket_list)
+
     print f % (added_str, message_str, fruits_in_basket_str)
 
 main()
