@@ -132,7 +132,7 @@ def show_html(fruits_in_basket, choose_list, message_list, cookie):
     - `message_list`:
     - `cookie`:
     """
-    path = "%s/%s" % (TEMPLATE_DIR, 'index.html')
+    path = os.path.abspath(os.path.join(os.path.dirname(__file__), TEMPLATE_DIR, 'index.html'))
     f = open(path,'r').read()
     base_to_html(cookie)
     fruits_in_basket_str = ""
