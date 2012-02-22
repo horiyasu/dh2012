@@ -1,0 +1,14 @@
+﻿{% extends "kadai/base.html" %}
+{% block title %}課題3{% endblock %}
+{% block main %}
+<h1>課題3</h1>
+<div id="contents">
+<form method="POST" action="{% url kadai_kadai3 %}">
+<table>
+{{ form }}
+</table>
+<input type="submit" value="送信する" />
+{% csrf_token %}
+</form>
+</div>
+{% endblock %}

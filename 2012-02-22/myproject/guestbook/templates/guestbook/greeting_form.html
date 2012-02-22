@@ -1,0 +1,22 @@
+﻿{% extends "guestbook/base.html" %}
+{% block title %}ゲストブック{% endblock %}
+{% block main %}
+<h1>ゲストブック</h1>
+<div id="form-area">
+<p>書き込みをどうぞ。</p>
+<form action="{% url guestbook_index %}" method="post">
+{% csrf_token %}
+<table>{{ form.as_table }}</table>
+<p><button type="submit">送信</button></p>
+</form>
+</div>
+<div id="entries-area">
+<h2>これまでの書き込み</h2>
+<div class="entry">
+{% for greeting in greeting_list %}
+<h3>{{ greeting.username }} さんの書き込み({{ greeting.created_at }}):</h3>
+<p>{{ greeting.content|linebreaksbr }}</p>
+{% endfor %}
+</div>
+</div>
+{% endblock %}
