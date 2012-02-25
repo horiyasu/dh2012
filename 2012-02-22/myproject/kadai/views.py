@@ -37,12 +37,18 @@ def kadai3(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
-
+            return HttpResponseRedirect('/kadai/kadai3_thanks/')
+        else:
+            ctxt = RequestContext(request,{"form":form})
+            return render_to_response('kadai/kadai3.html', ctxt)
+            
     else:
         form = ContactForm()
         ctxt = RequestContext(request,{"form":form})
         return render_to_response('kadai/kadai3.html', ctxt)
 
-
-
+def kadai3_thanks(request):
+    ctxt = RequestContext(request,{})
+    return render_to_response('kadai/kadai3_thanks.html', ctxt)
+    
 
