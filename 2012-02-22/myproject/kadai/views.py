@@ -3,6 +3,7 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 from datetime import date
 
@@ -37,7 +38,7 @@ def kadai3(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/kadai/kadai3_thanks/')
+            return HttpResponseRedirect(reverse(kadai3_thanks))
         else:
             ctxt = RequestContext(request,{"form":form})
             return render_to_response('kadai/kadai3.html', ctxt)
