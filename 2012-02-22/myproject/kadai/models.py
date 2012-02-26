@@ -12,7 +12,7 @@ class Contact(models.Model):
         モデルの文字列表現
         内容の改行を削除して先頭から２０文字を返す
         """
-        return self.name + ":"+''.join(unicode(self.content).splitlines())[:20]
+        return ''.join(unicode(self.content).splitlines())[:20]
 
     class Meta:
         # ソート順
